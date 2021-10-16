@@ -9,13 +9,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Manager.Entities;
-using WebAPI.Exeptions;
+ 
 
 namespace Manager.Services
 {
     public interface IAccountService
     {
-        void LoginUser(LoginUserDto dto);
+        bool LoginUser(LoginUserDto dto);
     
         void RegisterUser(RegisterUserDto dto);
     }
@@ -47,21 +47,18 @@ namespace Manager.Services
             _context.SaveChanges();
 
         }
-        public async void LoginUser(LoginUserDto dto)
+        public  bool LoginUser(LoginUserDto dto)
         {
             var user = _context.User
                 .Include(u => u.Role)
                 .FirstOrDefault(u => u.Email == dto.Email);
             if (user is null)
-            {
-                throw new BadRequestException("Invalid username or password");
-            }
+                return false;
+            
 
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             if (result == PasswordVerificationResult.Failed)
-            {
-                throw new BadRequestException("Invalid username or password");
-            }
+                return false;
 
             var claims = new List<Claim>()
             {
@@ -85,6 +82,8 @@ namespace Manager.Services
             //    CookieAuthenticationDefaults.AuthenticationScheme,
             //    new ClaimsPrincipal(claimsIdentity),
             //    authProperties);
+
+            return true;
         }
 
     }
