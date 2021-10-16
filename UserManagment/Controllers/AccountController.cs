@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Manager.Models;
 using Manager.Services;
-
-
+using Vereyon.Web;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace Manager.Controllers
 {
@@ -10,12 +11,16 @@ namespace Manager.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
+        private readonly IFlashMessage _flashMessage;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, IFlashMessage flashMessage, ILogger<AccountController> logger)
         {
             _accountService = accountService;
+            _flashMessage = flashMessage;
+            _logger = logger;
         }
-
+        
         [HttpGet]
         public IActionResult Login()
         {
@@ -23,10 +28,20 @@ namespace Manager.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login([FromForm] LoginUserDto dto)
+        public IActionResult LoginUser([FromForm] LoginUserDto dto)
         {
-            _accountService.LoginUser(dto);
-            return RedirectToAction("Login");
+            if (!ModelState.IsValid)
+                return View("Login");
+
+            var result = _accountService.LoginUser(dto);
+            if(result)
+                return RedirectToAction("/");
+            else
+            {
+                _flashMessage.Danger("Invalid username or password");
+                return RedirectToAction("Login");
+            }
+                
         }
 
         [HttpGet]
