@@ -19,6 +19,8 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Vereyon.Web;
+using Manager.Middleware;
 
 namespace Manager
 {
@@ -53,8 +55,11 @@ namespace Manager
             services.AddScoped<IAccountService, AccountService>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+            services.AddScoped<IValidator<LoginUserDto>, LoginUserDtoValidator>();
+            services.AddScoped<ErrorLoggingMiddleware>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-          
+            services.AddFlashMessage();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,11 +67,18 @@ namespace Manager
         {
 
             seeder.Seed();
-            if (env.IsDevelopment())
+            if (!env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error/ExeptionPage");
+                app.UseHsts();
+            }
             
+            app.UseMiddleware<ErrorLoggingMiddleware>();
+            app.UseStatusCodePagesWithRedirects("/Error/Code/{0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
@@ -84,7 +96,7 @@ namespace Manager
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Account}/{action=Login}");
+                    pattern: "{controller=Account}/{action=Login}/{id?}");
             });
         }
     }
