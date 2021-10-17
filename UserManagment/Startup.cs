@@ -59,6 +59,7 @@ namespace Manager
             services.AddScoped<ErrorLoggingMiddleware>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddFlashMessage();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         }
 
@@ -83,13 +84,13 @@ namespace Manager
             app.UseStaticFiles();
             app.UseRouting();
 
-            var cookiePolicyOptions = new CookiePolicyOptions
+           
+
+            app.UseCookiePolicy(new CookiePolicyOptions
             {
                 MinimumSameSitePolicy = SameSiteMode.Strict,
                 Secure = CookieSecurePolicy.Always,
-            };
-
-            app.UseCookiePolicy(cookiePolicyOptions);
+            });
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
