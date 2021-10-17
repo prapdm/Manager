@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Manager.Entities;
- 
+using System.Threading.Tasks;
 
 namespace Manager.Services
 {
@@ -18,18 +18,19 @@ namespace Manager.Services
         bool LoginUser(LoginUserDto dto);
     
         void RegisterUser(RegisterUserDto dto);
+   
     }
     public class AccountService : IAccountService
     {
         private readonly ManagerDbContext _context;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-
-        public AccountService(ManagerDbContext context, IPasswordHasher<User> passwordHasher)
+        public AccountService(ManagerDbContext context, IPasswordHasher<User> passwordHasher, IHttpContextAccessor contextAccessor)
         {
             _context = context;
             _passwordHasher = passwordHasher;
- 
+            _contextAccessor = contextAccessor;
         }
         public void RegisterUser(RegisterUserDto dto)
         {
@@ -78,12 +79,14 @@ namespace Manager.Services
                 IsPersistent = true,
             };
 
-            //await HttpContext.SignInAsync(
-            //    CookieAuthenticationDefaults.AuthenticationScheme,
-            //    new ClaimsPrincipal(claimsIdentity),
-            //    authProperties);
-
+            LoginAsync(new ClaimsPrincipal(claimsIdentity),authProperties);
             return true;
+
+        }
+
+        private async void LoginAsync(ClaimsPrincipal claimsPrincipal, AuthenticationProperties authentication)
+        {
+            await _contextAccessor.HttpContext.SignInAsync(claimsPrincipal, authentication);
         }
 
     }
