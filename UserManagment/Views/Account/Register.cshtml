@@ -3,60 +3,61 @@
 @{
     ViewData["Title"] = "Register new account";
 }
+<div class="container">
+    <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+                <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                <div class="col-lg-7">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                        </div>
+                        <form class="user" method="post" action="@Url.Action("RegisterUser")">
+                            @Html.AntiForgeryToken()
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input asp-for="Name" type="text" class="form-control form-control-user"
+                                           placeholder="First Name">
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input asp-for="Surname" type="text" class="form-control form-control-user"
+                                           placeholder="Last Name">
+                                    <span asp-validation-for="Surname" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input asp-for="Email" type="email" autocomplete="username" class="form-control form-control-user"
+                                       placeholder="Email Address">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input asp-for="Password" type="password" class="form-control form-control-user"
+                                           placeholder="Password">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input asp-for="ConfirmPassword" type="password" class="form-control form-control-user"
+                                           placeholder="Repeat Password">
+                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-user btn-block">
+                                Register Account
+                            </button>
 
-<div class="card o-hidden border-0 shadow-lg my-5">
-    <div class="card-body p-0">
-        <!-- Nested Row within Card Body -->
-        <div class="row">
-            <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-            <div class="col-lg-7">
-                <div class="p-5">
-                    <div class="text-center">
-                        <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
-                    </div>
-                    <form class="user" method="post" action="@Url.Action("RegisterUser")">
-                        @Html.AntiForgeryToken()
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group row">
-                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input asp-for="Name" type="text" class="form-control form-control-user"
-                                       placeholder="First Name">
-                                <span asp-validation-for="Name" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-6">
-                                <input asp-for="Surname" type="text" class="form-control form-control-user"
-                                       placeholder="Last Name">
-                                <span asp-validation-for="Surname" class="text-danger"></span>
-                            </div>
+                        </form>
+                        <hr>
+                        <div class="text-center">
+                            <a class="small" href="@Url.Action("ForgotPassword")">Forgot Password?</a>
                         </div>
-                        <div class="form-group">
-                            <input asp-for="Email" type="email" autocomplete="username" class="form-control form-control-user"
-                                   placeholder="Email Address">
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                        <div class="text-center">
+                            <a class="small" href="@Url.Action("Login")">Already have an account? Login!</a>
                         </div>
-                        <div class="form-group row">
-                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input asp-for="Password" type="password" class="form-control form-control-user"
-                                       placeholder="Password">
-                                <span asp-validation-for="Password" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-6">
-                                <input asp-for="ConfirmPassword" type="password" class="form-control form-control-user"
-                                       placeholder="Repeat Password">
-                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-user btn-block">
-                            Register Account
-                        </button>
-
-                    </form>
-                    <hr>
-                    <div class="text-center">
-                        <a class="small" href="@Url.Action("ForgotPassword")">Forgot Password?</a>
-                    </div>
-                    <div class="text-center">
-                        <a class="small" href="@Url.Action("Login")">Already have an account? Login!</a>
                     </div>
                 </div>
             </div>
