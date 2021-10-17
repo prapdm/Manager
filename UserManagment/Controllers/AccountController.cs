@@ -24,7 +24,13 @@ namespace Manager.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View("Login");
+
+            if(!User.Identity.IsAuthenticated)
+            {
+                return View("Login");
+            }
+            return RedirectToAction("index","manager");
+
         }
 
         [HttpPost]
@@ -35,7 +41,7 @@ namespace Manager.Controllers
 
             var result = _accountService.LoginUser(dto);
             if(result)
-                return RedirectToAction("/");
+                return RedirectToAction("index", "manager");
             else
             {
                 _flashMessage.Danger("Invalid username or password");
