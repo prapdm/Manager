@@ -12,13 +12,12 @@ namespace Manager.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IFlashMessage _flashMessage;
-        private readonly ILogger<AccountController> _logger;
+   
 
-        public AccountController(IAccountService accountService, IFlashMessage flashMessage, ILogger<AccountController> logger)
+        public AccountController(IAccountService accountService, IFlashMessage flashMessage)
         {
             _accountService = accountService;
             _flashMessage = flashMessage;
-            _logger = logger;
         }
         
         [HttpGet]
@@ -39,7 +38,7 @@ namespace Manager.Controllers
             if (!ModelState.IsValid)
                 return View("Login");
 
-            var result = _accountService.LoginUser(dto);
+            var result = _accountService.VerifyPassword(dto);
             if(result)
                 return RedirectToAction("index", "manager");
             else
@@ -63,10 +62,35 @@ namespace Manager.Controllers
             return View("Register");
 
             _accountService.RegisterUser(dto);
-            return RedirectToAction("Login");
+            _flashMessage.Info("Check your email account to confirm your email address.");
+            return RedirectToAction("VeryfiyEmail");
         }
 
-        
+        [HttpGet]
+        public IActionResult VeryfiyEmail()
+        {
+            return View("VeryfiyEmail");
+        }
+
+        [HttpPost]
+        public IActionResult VeryfiyEmail([FromForm] VeryfiyEmailDto dto)
+        {
+            if (!ModelState.IsValid)
+                return View("VeryfiyEmail");
+
+            var result = _accountService.VeryfiyEmail(dto);
+            if (!result)
+            {
+                _flashMessage.Info("Verification code or email is incorect.");
+                return RedirectToAction("VeryfiyEmail");
+            }
+            else
+            {
+                _flashMessage.Info("Your account is active now. You can log in.");
+                return RedirectToAction("Login");
+            }
+
+        }
 
         [HttpGet]
         public IActionResult ForgotPassword()
