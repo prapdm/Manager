@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using Manager.Entities;
-using System.Linq;
+
 
 
 namespace Manager.Models.Validators
 {
     public class LoginUserDtoValidator : AbstractValidator<LoginUserDto>
     {
-        public LoginUserDtoValidator(ManagerDbContext dBContext)
+        public LoginUserDtoValidator()
         {
 
             RuleFor(x => x.Email).NotEmpty();
