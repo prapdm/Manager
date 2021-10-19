@@ -10,9 +10,14 @@ namespace Manager.Controllers
         [HttpGet]
         public IActionResult Index()
         {
- 
             return View("Manager");
+        }
 
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Manager")]
+        public IActionResult Users()
+        {
+            return View("Users");
         }
     }
 }
