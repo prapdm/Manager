@@ -1,0 +1,54 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model Manager.Models.RegisterUserDto
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <style type="text/css">
+
+        p {
+            margin-top: 0px;
+            margin-bottom: 20px;
+        }
+
+        a, a:visited, a b {
+            color: #378DC1;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+            a:hover {
+                text-decoration: none;
+            }
+
+            a img {
+                border: none;
+            }
+
+        #container {
+            width: 680px;
+        }
+    </style>
+</head>
+<body style="font-family:Calibri; font-size:14px;">
+    <div id="container">
+
+        <h1 style="font-size:16px;color:#000">Hi @Model.Name, </h1>
+        <p>
+            Activation Code: <b>@Model.VerifcationCode</b> 
+        </p>
+        <p>
+            Copy or rewrite the code, then return to the browser to activate account.
+            <br /> <br />
+            If you need help, do not hesitate to contact us.
+            This message was generated automatically. Please do not reply.
+            <br /> <br />
+            Kind regards,<br />
+            Administrator
+        </p>
+        <br><br>
+
+
+    </div>
+</body>
+</html>
