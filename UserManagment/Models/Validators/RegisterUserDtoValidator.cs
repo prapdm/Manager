@@ -17,7 +17,7 @@ namespace Manager.Models.Validators
             RuleFor(x => x.Email)
                 .Custom((value, context) =>
                 {
-                    var emailInUse = dBContext.User.Any(u => u.Email == value);
+                    var emailInUse = dBContext.Users.Any(u => u.Email == value);
                     if (emailInUse)
                     {
                         context.AddFailure("Email", "That email is taken");
