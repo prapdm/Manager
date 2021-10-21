@@ -46,13 +46,21 @@ namespace Manager.Entities
               .Property(u => u.IsActive)
               .HasDefaultValue(false);
 
+
             modelBuilder.Entity<User>()
               .Property(u => u.PasswordHash)
               .IsRequired();
 
             modelBuilder.Entity<User>()
+              .Property(u => u.CreatedAt)
+              .HasDefaultValueSql("GETDATE()")
+              .ValueGeneratedOnAdd()
+              .IsRequired();
+
+            modelBuilder.Entity<User>()
               .Property(u => u.UpdatedAt)
               .HasDefaultValueSql("GETDATE()")
+              .ValueGeneratedOnAddOrUpdate()
               .IsRequired();
 
             //Role
@@ -62,8 +70,15 @@ namespace Manager.Entities
               .IsRequired();
 
             modelBuilder.Entity<Role>()
-              .Property(r => r.UpdatedAt)
+              .Property(u => u.CreatedAt)
               .HasDefaultValueSql("GETDATE()")
+              .ValueGeneratedOnAdd()
+              .IsRequired();
+
+            modelBuilder.Entity<Role>()
+              .Property(u => u.UpdatedAt)
+              .HasDefaultValueSql("GETDATE()")
+              .ValueGeneratedOnAddOrUpdate()
               .IsRequired();
 
 
