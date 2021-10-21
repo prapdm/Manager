@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Vereyon.Web;
 using Manager.Middleware;
+using FluentEmail.MailKitSmtp;
+using System.IO;
 
 namespace Manager
 {
@@ -45,7 +47,7 @@ namespace Manager
                        options.SlidingExpiration = true;
                        options.AccessDeniedPath = "/Account/Login";
                    });
-            services.AddControllersWithViews().AddFluentValidation(); 
+            services.AddControllersWithViews().AddFluentValidation().AddRazorRuntimeCompilation(); 
             services.AddDbContext<ManagerDbContext>(options =>
                 {
                     options.UseSqlServer(Configuration.GetConnectionString("ManagerDbConnection"));
@@ -53,13 +55,35 @@ namespace Manager
             services.AddScoped<DBSeeder>();
            
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
             services.AddScoped<IValidator<LoginUserDto>, LoginUserDtoValidator>();
+            services.AddScoped<IValidator<VeryfiyEmailDto>, VeryfiyEmailDtoValidator>();
+            services.AddScoped<IValidator<ChangePasswordDto>, ChangePasswordValidator>();
             services.AddScoped<ErrorLoggingMiddleware>();
+            services.AddScoped<RequestTimeMiddleware>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddFlashMessage();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IUserContextService, UserContextService>();
+
+            var mailSettings = new MailSettings();
+            Configuration.GetSection("MailSettings").Bind(mailSettings);
+            services.AddSingleton(mailSettings);
+
+            services.AddFluentEmail(mailSettings.From, mailSettings.DisplayName)
+                .AddRazorRenderer()
+                .AddMailKitSender(new SmtpClientOptions
+                {
+                    Server = mailSettings.Host,
+                    Port = mailSettings.Port,
+                    UseSsl = mailSettings.UseSsl,
+                    RequiresAuthentication = mailSettings.RequiresAuthentication,
+                    User = mailSettings.From,
+                    Password = mailSettings.Password
+                });
+            services.AddScoped<IMailSenderService, MailSenderService>();
 
         }
 
