@@ -21,28 +21,23 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Email verification</h1>
                                 </div>
-                                <form class="user" action="@Url.Action("VeryfiyEmail")" method="POST">
-                                    @Html.AntiForgeryToken()
+
+                                @using (Html.BeginForm("VeryfiyEmail", "Account", FormMethod.Post))
+                                {
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                     <div class="form-group">
-                                        <input asp-for="Email" type="email" class="form-control form-control-user"
-                                               id="exampleInputEmail" aria-describedby="emailHelp"
-                                               placeholder="Enter Email Address...">
-                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-user", @type = "email", @placeholder = "Enter Email Address..." })
+                                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
-                                        <input asp-for="VerifcationCode"   class="form-control form-control-user"
-                                                aria-describedby="emailHelp"
-                                               placeholder="Enter Verifcation Code...">
-                                        <span asp-validation-for="VerifcationCode" class="text-danger"></span>
+                                        @Html.TextBoxFor(m => m.VerifcationCode, new { @class = "form-control form-control-user", @placeholder = "Verifcation code" })
+                                        @Html.ValidationMessageFor(m => m.VerifcationCode, "", new { @class = "text-danger" }) 
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-user btn-block">
                                         Verify
                                     </button>
-
-                                </form>
-                                
-                            
+                                }
+                                 
                             </div>
                         </div>
                     </div>
