@@ -12,7 +12,9 @@ using Manager.Entities;
 using System.Threading.Tasks;
 using FluentEmail.Core;
 using System.Reflection;
-
+using System.Security.Policy;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace Manager.Services
 {
@@ -21,24 +23,27 @@ namespace Manager.Services
         bool VerifyPassword(LoginUserDto dto);
         void RegisterUser(RegisterUserDto dto);
         bool VeryfiyEmail(VeryfiyEmailDto dto);
-   
+        void Logout();
+        bool ForgotPassword(VeryfiyEmailDto dto);
+        bool VeryfiyToken(string token);
+        bool ChangePassword(string token, ChangePasswordDto dto);
+
+
     }
     public class AccountService : IAccountService
     {
         private readonly ManagerDbContext _context;
-        private readonly IPasswordHasher<UserService> _passwordHasher;
+        private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly MailSettings _mailSettings;
-        private readonly IFluentEmail _email;
-
-        public AccountService(ManagerDbContext context, IPasswordHasher<UserService> passwordHasher, IHttpContextAccessor contextAccessor,
-                MailSettings mailSettings, IFluentEmail email  )
+        private readonly IMailSenderService _mailSenderService;
+        private readonly static Random random = new Random();
+        public AccountService(ManagerDbContext context, IPasswordHasher<User> passwordHasher, 
+            IHttpContextAccessor contextAccessor, IMailSenderService mailSenderService   )
         {
             _context = context;
             _passwordHasher = passwordHasher;
             _contextAccessor = contextAccessor;
-            _mailSettings = mailSettings;
-            _email = email;
+            _mailSenderService = mailSenderService;
         }
         public bool VeryfiyEmail(VeryfiyEmailDto dto)
         {
@@ -61,47 +66,114 @@ namespace Manager.Services
         {
             Random rnd = new();
             dto.VerifcationCode = rnd.Next(10000, 99999);
-            var newUser = new UserService()
+            var newUser = new User()
             {
                 Email = dto.Email,
                 Name = dto.Name,
                 Surname = dto.Surname,
                 RoleId = dto.RoleId,
-                VerifcationCode = dto.VerifcationCode
+                VerifcationCode = dto.VerifcationCode,
             };
 
             var hashedPassword = _passwordHasher.HashPassword(newUser, dto.Password);
             newUser.PasswordHash = hashedPassword;
             _context.Users.Add(newUser);
             _context.SaveChanges();
-            var test = this.GetType().GetTypeInfo().Assembly;
 
-            var email = _email
-                .To(dto.Email)
-                .BCC(_mailSettings.AdminBCC)
-                .Subject("Confirm your addres email")
-                .UsingTemplateFromFile(@"Views\Mail\Welcome.cshtml", dto);
+            var email = new MailSenderDto()
+            {
+                Email = dto.Email,
+                Name = dto.Name,
+                Surname = dto.Surname,
+                Subject = "Confirm your addres email",
+                Template = "Welcome.cshtml",
+                VerifcationCode = dto.VerifcationCode
+            };
+
+            _mailSenderService.SendHtml(email);
  
-            Task.Run(async () => await email.SendAsync());
-
         }
 
         public bool VerifyPassword(LoginUserDto dto)
         {
             var user = _context.Users
                 .FirstOrDefault(u => u.Email == dto.Email);
+
             if (user is null)
                 return false;
-            
 
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             if (result == PasswordVerificationResult.Failed)
                 return false;
 
-            return Login(user.Id);
-            
-
+            return Login(user.Id); 
         }
+
+
+        public bool VeryfiyToken(string token)
+        {
+            var user = _context.Users
+                .Where(d => d.UpdatedAt >= DateTime.Now.AddHours(-24) && d.UpdatedAt < DateTime.Now)
+                .Where(u => u.VerifcationToken == token && u.VerifcationToken != null)
+                .FirstOrDefault();
+
+            if (user is null)
+                return false;
+
+            return true;
+        }
+
+        public bool ChangePassword(string token, ChangePasswordDto dto)
+        {
+            var user = _context.Users
+                .Where(d => d.UpdatedAt >= DateTime.Now.AddHours(-24) && d.UpdatedAt < DateTime.Now)
+                .Where(u => u.VerifcationToken == token && u.VerifcationToken != null)
+                .FirstOrDefault();
+
+            if (user is null)
+                return false;
+
+            var hashedPassword = _passwordHasher.HashPassword(user, dto.Password);
+            user.PasswordHash = hashedPassword;
+            _context.SaveChanges();
+
+            return true;
+        }
+             
+
+        public bool ForgotPassword(VeryfiyEmailDto dto)
+        {
+            var user = _context.Users
+                .Where(u => u.Email == dto.Email)
+                .Where(c => c.IsActive == true)
+                .FirstOrDefault();
+
+            if (user is null)
+                return false;
+
+            var token = RandomString(35);
+            user.VerifcationToken = token;
+            _context.SaveChanges();
+
+            var url = _contextAccessor.HttpContext?.Request?.GetDisplayUrl();
+
+            var email = new MailSenderDto()
+            {
+                Email = user.Email,
+                Name = user.Name,
+                Surname = user.Surname,
+                Subject = "Reset password",
+                Template = "ResetPassword.cshtml",
+                Url = $"{url}?token={token}"
+            };
+
+            _mailSenderService.SendHtml(email);
+
+            return true;
+        }
+
+ 
+
 
         private bool Login(int userId)
         {
@@ -132,12 +204,24 @@ namespace Manager.Services
             return true;
         }
 
+
+        public async void Logout()
+        {
+            await _contextAccessor.HttpContext.SignOutAsync();
+        }
+
+        private static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
         private async void LoginAsync(ClaimsPrincipal claimsPrincipal, AuthenticationProperties authentication)
         {
             await _contextAccessor.HttpContext.SignInAsync(claimsPrincipal, authentication);
         }
 
-   
 
     }
 
