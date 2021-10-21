@@ -31,10 +31,10 @@ namespace Manager
                 }
 
 
-                if (!_dbContext.User.Any())
+                if (!_dbContext.Users.Any())
                 {
                     var users = GetUsers();
-                    _dbContext.User.AddRange(users);
+                    _dbContext.Users.AddRange(users);
                     _dbContext.SaveChanges();
                 }
 
@@ -65,7 +65,7 @@ namespace Manager
                     Email = "admin@Manager.pl",
                     Phone = "+48.654125456",
                     IsActive = true,
-                    PasswordHash = "6f3882bd3075bb465dc237f226afff18",
+                    PasswordHash = "+7IvXx8bCmbADWM9JDzJYVqxdbjrz8fO/S7c51Q==",
                     CreatedAt = DateTime.Now
                 },
                 new User()
@@ -81,7 +81,7 @@ namespace Manager
                     Email = "s.fajkowski@Manager.pl",
                     Phone = "+48.634242553",
                     IsActive = false,
-                    PasswordHash = "f20e7221a29fcb05711c4d0218825320",
+                    PasswordHash = "+7IvXx8bCmbADWM9JDzJYVqxdbjrz8fO/S7c51Q==",
                     CreatedAt = DateTime.Now
 
                 },
@@ -98,7 +98,7 @@ namespace Manager
                     Email = "a.wienkowski@itsolutions.pl",
                     Phone = "+48.553334234",
                     IsActive = false,
-                    PasswordHash = "54fb52e8ffa2b30cb62b337944e43ca4",
+                    PasswordHash = "+7IvXx8bCmbADWM9JDzJYVqxdbjrz8fO/S7c51Q==",
                     CreatedAt = DateTime.Now
 
                 }
