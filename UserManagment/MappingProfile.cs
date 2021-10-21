@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Manager.Entities;
+using Manager.Models;
 
 namespace Manager
 {
@@ -11,7 +8,9 @@ namespace Manager
     {
         public MappingProfile()
         {
-
+            CreateMap<User, UserDto>()
+                .ForMember(m => m.Role, c => c.MapFrom(s => s.Role.Name));
+              
         }  
     }
 }
