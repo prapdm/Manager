@@ -58,8 +58,6 @@ namespace Manager
             services.AddScoped<IUserService, UserService>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
-            services.AddScoped<IValidator<LoginUserDto>, LoginUserDtoValidator>();
-            services.AddScoped<IValidator<VeryfiyEmailDto>, VeryfiyEmailDtoValidator>();
             services.AddScoped<IValidator<ChangePasswordDto>, ChangePasswordValidator>();
             services.AddScoped<ErrorLoggingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
@@ -92,7 +90,7 @@ namespace Manager
         {
 
             seeder.Seed();
-            if (!env.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -120,8 +118,14 @@ namespace Manager
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "manager",
+                    pattern: "manager/{controller=Manager}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Account}/{action=Login}/{id?}");
+
+
             });
         }
     }
