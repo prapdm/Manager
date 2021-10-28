@@ -1,0 +1,73 @@
+﻿@model Manager.Models.UserDto
+ 
+@{
+    ViewData["Title"] = "User details";
+}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">@Model.Name @Model.Surname</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="p-3">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.Name)</b></td>
+                                    <td>@Html.DisplayFor(model => model.Name)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.Surname)</b></td>
+                                    <td>@Html.DisplayFor(model => model.Surname)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.Email)</b></td>
+                                    <td>@Html.DisplayFor(model => model.Email)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.Phone)</b></td>
+                                    <td>@Html.DisplayFor(model => model.Phone)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.Role)</b></td>
+                                    <td>@Html.DisplayFor(model => model.Role.Name)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.IsActive)</b></td>
+                                    <td>@Html.DisplayFor(model => model.IsActive)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                     </div>  
+                     <a href = "@Url.Action("Get", "Users")" class="btn btn-primary btn-user btn-block">
+                            Back
+                     </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/js/sb-admin-2.min.js"></script>
+
+
+
+    <!-- Page level custom scripts -->
+    <script src="~/js/demo/datatables-demo.js"></script>
+}
