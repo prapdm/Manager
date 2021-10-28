@@ -21,23 +21,23 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Email verification</h1>
                                 </div>
-
+                                @Html.ValidationSummary(true)
                                 @using (Html.BeginForm("VeryfiyEmail", "Account", FormMethod.Post))
                                 {
-                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                                     <div class="form-group">
                                         @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-user", @type = "email", @placeholder = "Enter Email Address..." })
                                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="form-group">
                                         @Html.TextBoxFor(m => m.VerifcationCode, new { @class = "form-control form-control-user", @placeholder = "Verifcation code" })
-                                        @Html.ValidationMessageFor(m => m.VerifcationCode, "", new { @class = "text-danger" }) 
+                                        @Html.ValidationMessageFor(m => m.VerifcationCode, "", new { @class = "text-danger" })
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-user btn-block">
                                         Verify
                                     </button>
                                 }
-                                 
+
                             </div>
                         </div>
                     </div>

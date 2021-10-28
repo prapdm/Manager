@@ -21,10 +21,11 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                 </div>
+                                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
                                 @using (Html.BeginForm("LoginUser", "Account", FormMethod.Post))
                                 {
 
-                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                                     <div class="form-group">
                                         @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-user", @type = "email", @placeholder = "Enter Email Address..." })
                                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
@@ -38,7 +39,7 @@
                                         Login
                                     </button>
 
-                                 }
+                                }
                                 <hr>
                                 <div class="text-center">
                                     <a class="small" href="@Url.Action("ForgotPassword")">Forgot Password?</a>
