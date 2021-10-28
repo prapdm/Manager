@@ -1,12 +1,13 @@
 ﻿using FluentEmail.Core;
 using Manager.Models;
+using System.Threading.Tasks;
 
 namespace Manager.Services
 {
     public interface IMailSenderService
     {
-        void SendHtml(MailSenderDto dto);
-        void SendPlain(MailSenderDto dto);
+        Task SendHtml(MailSenderDto dto);
+        Task SendPlain(MailSenderDto dto);
     }
 
     public class MailSenderService : IMailSenderService
@@ -19,7 +20,7 @@ namespace Manager.Services
             _email = email;
             _mailSettings = mailSettings;
         }
-        public async void SendHtml(MailSenderDto dto)
+        public async Task SendHtml(MailSenderDto dto)
         {
 
             var email = _email
@@ -31,7 +32,7 @@ namespace Manager.Services
             await email.SendAsync();
         }
 
-        public async void SendPlain(MailSenderDto dto)
+        public async Task SendPlain(MailSenderDto dto)
         {
 
             var email = _email
