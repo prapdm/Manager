@@ -15,18 +15,19 @@ using System.Reflection;
 using System.Security.Policy;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Manager.Services
 {
     public interface IAccountService
     {
-        bool VerifyPassword(LoginUserDto dto);
-        void RegisterUser(RegisterUserDto dto);
-        bool VeryfiyEmail(VeryfiyEmailDto dto);
-        void Logout();
-        bool ForgotPassword(VeryfiyEmailDto dto);
-        bool VeryfiyToken(string token);
-        bool ChangePassword(string token, ChangePasswordDto dto);
+        Task<bool> VerifyPassword(LoginUserDto dto);
+        Task RegisterUser(RegisterUserDto dto);
+        Task<bool> VeryfiyEmail(VeryfiyEmailDto dto);
+        Task Logout();
+        Task<bool> ForgotPassword(VeryfiyEmailDto dto);
+        Task<bool> VeryfiyToken(string token);
+        Task<bool> ChangePassword(string token, ChangePasswordDto dto);
 
 
     }
@@ -45,25 +46,26 @@ namespace Manager.Services
             _contextAccessor = contextAccessor;
             _mailSenderService = mailSenderService;
         }
-        public bool VeryfiyEmail(VeryfiyEmailDto dto)
+        public async Task<bool> VeryfiyEmail(VeryfiyEmailDto dto)
         {
-            var user = _context.Users
+            var user = await _context.Users
                 .Where(u => u.Email == dto.Email)
                 .Where(c => c.VerifcationCode == dto.VerifcationCode)
                 .Where(c => c.IsActive == false)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (user is null)
                  return false;
 
 
             user.IsActive = true;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public void RegisterUser(RegisterUserDto dto)
+        public async Task RegisterUser([Bind("Email, Name, Surname, ConfirmPassword")] RegisterUserDto dto)
         {
+           
             Random rnd = new();
             dto.VerifcationCode = rnd.Next(10000, 99999);
             var newUser = new User()
@@ -75,10 +77,10 @@ namespace Manager.Services
                 VerifcationCode = dto.VerifcationCode,
             };
 
-            var hashedPassword = _passwordHasher.HashPassword(newUser, dto.Password);
+            var hashedPassword =  _passwordHasher.HashPassword(newUser, dto.Password);
             newUser.PasswordHash = hashedPassword;
             _context.Users.Add(newUser);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var email = new MailSenderDto()
             {
@@ -90,14 +92,14 @@ namespace Manager.Services
                 VerifcationCode = dto.VerifcationCode
             };
 
-            _mailSenderService.SendHtml(email);
+            await _mailSenderService.SendHtml(email);
  
         }
 
-        public bool VerifyPassword(LoginUserDto dto)
+        public async Task<bool> VerifyPassword(LoginUserDto dto)
         {
-            var user = _context.Users
-                .FirstOrDefault(u => u.Email == dto.Email);
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
             if (user is null)
                 return false;
@@ -106,16 +108,16 @@ namespace Manager.Services
             if (result == PasswordVerificationResult.Failed)
                 return false;
 
-            return Login(user.Id); 
+            return await Login(user.Id); 
         }
 
 
-        public bool VeryfiyToken(string token)
+        public async Task<bool> VeryfiyToken(string token)
         {
-            var user = _context.Users
+            var user = await _context.Users
                 .Where(d => d.UpdatedAt >= DateTime.Now.AddHours(-24) && d.UpdatedAt < DateTime.Now)
                 .Where(u => u.VerifcationToken == token && u.VerifcationToken != null)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (user is null)
                 return false;
@@ -123,37 +125,38 @@ namespace Manager.Services
             return true;
         }
 
-        public bool ChangePassword(string token, ChangePasswordDto dto)
+        public async Task<bool> ChangePassword(string token, ChangePasswordDto dto)
         {
-            var user = _context.Users
+            var user = await _context.Users
                 .Where(d => d.UpdatedAt >= DateTime.Now.AddHours(-24) && d.UpdatedAt < DateTime.Now)
                 .Where(u => u.VerifcationToken == token && u.VerifcationToken != null)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (user is null)
                 return false;
 
             var hashedPassword = _passwordHasher.HashPassword(user, dto.Password);
             user.PasswordHash = hashedPassword;
-            _context.SaveChanges();
+            user.VerifcationToken = null;
+            await _context.SaveChangesAsync();
 
             return true;
         }
              
 
-        public bool ForgotPassword(VeryfiyEmailDto dto)
+        public async Task<bool> ForgotPassword(VeryfiyEmailDto dto)
         {
-            var user = _context.Users
+            var user = await _context.Users
                 .Where(u => u.Email == dto.Email)
                 .Where(c => c.IsActive == true)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (user is null)
                 return false;
 
             var token = RandomString(35);
             user.VerifcationToken = token;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var url = _contextAccessor.HttpContext?.Request?.GetDisplayUrl();
 
@@ -167,7 +170,7 @@ namespace Manager.Services
                 Url = $"{url}?token={token}"
             };
 
-            _mailSenderService.SendHtml(email);
+            await _mailSenderService.SendHtml(email);
 
             return true;
         }
@@ -175,7 +178,7 @@ namespace Manager.Services
  
 
 
-        private bool Login(int userId)
+        private async Task<bool> Login(int userId)
         {
             var user = _context.Users
                 .Include(u => u.Role)
@@ -199,13 +202,13 @@ namespace Manager.Services
                 IsPersistent = true,
             };
 
-            LoginAsync(new ClaimsPrincipal(claimsIdentity), authProperties);
+            await LoginAsync(new ClaimsPrincipal(claimsIdentity), authProperties);
 
             return true;
         }
 
 
-        public async void Logout()
+        public async Task Logout()
         {
             await _contextAccessor.HttpContext.SignOutAsync();
         }
@@ -217,7 +220,7 @@ namespace Manager.Services
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        private async void LoginAsync(ClaimsPrincipal claimsPrincipal, AuthenticationProperties authentication)
+        private async Task LoginAsync(ClaimsPrincipal claimsPrincipal, AuthenticationProperties authentication)
         {
             await _contextAccessor.HttpContext.SignInAsync(claimsPrincipal, authentication);
         }
