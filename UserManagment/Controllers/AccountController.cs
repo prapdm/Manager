@@ -33,12 +33,12 @@ namespace Manager.Controllers
         }
 
         [HttpPost]
-        public IActionResult LoginUser([FromForm] LoginUserDto dto)
+        public async Task<IActionResult> LoginUser([FromForm] LoginUserDto dto)
         {
             if (!ModelState.IsValid)
                 return View("Login");
 
-            var result = _accountService.VerifyPassword(dto);
+            var result = await _accountService.VerifyPassword(dto);
             if(result)
                 return RedirectToAction("index", "manager");
             else
@@ -56,12 +56,12 @@ namespace Manager.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegisterUser([FromForm] RegisterUserDto dto)
+        public async Task<IActionResult> RegisterUser([FromForm] RegisterUserDto dto)
         {
             if (!ModelState.IsValid)
             return View("Register");
 
-            _accountService.RegisterUser(dto);
+            await _accountService.RegisterUser(dto);
             _flashMessage.Info("Check your email account to confirm your email address.");
             return RedirectToAction("VeryfiyEmail");
         }
@@ -76,16 +76,16 @@ namespace Manager.Controllers
         
 
         [HttpPost]
-        public IActionResult ChangePassword([FromForm] ChangePasswordDto dto)
+        public async Task<IActionResult> ChangePassword([FromForm] ChangePasswordDto dto)
         {
             if (!ModelState.IsValid)
             {
                 _flashMessage.Warning("Check if passwords are the same and email address is valid");
-                return RedirectToAction("ForgotPassword", new { token = dto.VerifyToken });
+                return View("ChangePassword");
             }
                
 
-            var result = _accountService.ChangePassword(dto.VerifyToken, dto);
+            var result = await _accountService.ChangePassword(dto.VerifyToken, dto);
             if (!result)
             {
                 _flashMessage.Info("The token is invalid or has expired");
@@ -95,11 +95,15 @@ namespace Manager.Controllers
             return RedirectToAction("Login");
         }
 
+
+
         [HttpPost]
-        public IActionResult VeryfiyEmail([FromForm] VeryfiyEmailDto dto)
+        public async Task<IActionResult> VeryfiyEmail([FromForm] VeryfiyEmailDto dto)
         {
- 
-            var result = _accountService.VeryfiyEmail(dto);
+            if (!ModelState.IsValid)
+                return View("VeryfiyEmail");
+
+            var result = await _accountService.VeryfiyEmail(dto);
             if (!result)
             {
                 _flashMessage.Warning("Verification code or email is incorect.");
@@ -117,12 +121,12 @@ namespace Manager.Controllers
 
 
         [HttpGet]
-        public IActionResult ForgotPassword([FromQuery] string token)
+        public async Task<IActionResult> ForgotPassword([FromQuery] string token)
         {
             if(token is null)
                 return View("ForgotPassword");
 
-            var result = _accountService.VeryfiyToken(token);
+            var result = await _accountService.VeryfiyToken(token);
             if (result)
                 return View("ChangePassword");
 
@@ -135,9 +139,12 @@ namespace Manager.Controllers
         }
 
         [HttpPost]
-        public IActionResult ForgotPassword([FromForm] VeryfiyEmailDto dto)
+        public async Task<IActionResult> ForgotPassword([FromForm] VeryfiyEmailDto dto)
         {
-            var result = _accountService.ForgotPassword(dto);
+            if (!ModelState.IsValid)
+                return View("ForgotPassword");
+
+            var result = await _accountService.ForgotPassword(dto);
             if (result)
             {
                 _flashMessage.Info("Check your email account to reset password.");
