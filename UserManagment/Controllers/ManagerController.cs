@@ -1,7 +1,9 @@
-﻿using Manager.Services;
+﻿using Manager.Models;
+using Manager.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Threading.Tasks;
+using Vereyon.Web;
 
 namespace Manager.Controllers
 {
@@ -10,31 +12,34 @@ namespace Manager.Controllers
     public class ManagerController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IFlashMessage _flashMessage;
 
-        public ManagerController(IUserService userService)
+        public ManagerController(IUserService userService, IFlashMessage flashMessage)
         {
             _userService = userService;
+            _flashMessage = flashMessage;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View("Manager");
         }
 
-        [HttpGet]
-        [Authorize(Roles = "Administrator, Manager")]
-        public IActionResult Users()
-        {
-           var usersDtos = _userService.GetAll();
-           return View("Users", usersDtos);
-        }
 
         [HttpGet]
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
         {
-            return View("Profile");
+            var usersDto = await _userService.Get();
+            return View("Profile", usersDto);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SaveProfile([FromForm] UserDto dto)
+        {
+            await _userService.SaveProfile(dto);
+            _flashMessage.Info("Data successfully updated");
+            return RedirectToAction("Profile");
+        }
     }
 }
