@@ -1,7 +1,7 @@
-﻿@model List<Manager.Models.UserDto>
-
+﻿@model Manager.Models.UserDto
+@addTagHelper *, Vereyon.Web.FlashMessage
 @{
-    ViewBag.Title = "Profile";
+    ViewData["Title"] = "Profile";
 }
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -12,7 +12,40 @@
             <h6 class="m-0 font-weight-bold text-primary">Profile</h6>
         </div>
         <div class="card-body">
-            
+            <div class="row">
+
+
+                <div class="p-5">
+                    <flash bootstrap-version="3" />
+                    @Html.ValidationSummary(true)
+                    @using (Html.BeginForm("SaveProfile", "Manager", FormMethod.Post))
+                    {
+
+                        <div class="form-group">
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-control-user", @placeholder = "First Name" })
+                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.TextBoxFor(m => m.Surname, new { @class = "form-control form-control-user", @placeholder = "Surname" })
+                            @Html.ValidationMessageFor(m => m.Surname, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control form-control-user", @placeholder = "Phone" })
+                            @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-user", @type = "email", @placeholder = "Email Address" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-user btn-block">
+                            Save
+                        </button>
+                    }
+
+                </div>
+
+            </div>
         </div>
     </div>
 
