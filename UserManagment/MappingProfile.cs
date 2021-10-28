@@ -8,9 +8,11 @@ namespace Manager
     {
         public MappingProfile()
         {
-            CreateMap<User, UserDto>()
-                .ForMember(m => m.Role, c => c.MapFrom(s => s.Role.Name));
-              
+            CreateMap<User, UserDto>();
+
+ 
+ 
+
         }  
     }
 }
