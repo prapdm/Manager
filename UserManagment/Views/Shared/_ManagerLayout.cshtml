@@ -110,7 +110,7 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="@Url.Action( "Get","Users" )">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>System users</span>
                 </a>
@@ -216,7 +216,7 @@
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="userDropdown">
                               
-                                <a class="dropdown-item" href="@Url.Action("Profile")">
+                                <a class="dropdown-item" href="@Url.Action("Profile", "Manager")">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
