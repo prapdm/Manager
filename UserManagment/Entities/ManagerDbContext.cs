@@ -18,7 +18,9 @@ namespace Manager.Entities
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Category> Categories { get; set; } 
 
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,11 +43,9 @@ namespace Manager.Entities
                .Property(u => u.Phone)
                .HasMaxLength(20);
 
-
             modelBuilder.Entity<User>()
               .Property(u => u.IsActive)
               .HasDefaultValue(false);
-
 
             modelBuilder.Entity<User>()
               .Property(u => u.PasswordHash)
@@ -80,6 +80,35 @@ namespace Manager.Entities
               .HasDefaultValueSql("GETDATE()")
               .ValueGeneratedOnAddOrUpdate()
               .IsRequired();
+
+            //Categories
+            modelBuilder.Entity<Category>()
+            .HasOne(s => s.Parent)
+            .WithMany(m => m.Children)
+            .HasForeignKey(e => e.ParentId);
+
+            modelBuilder.Entity<Category>()
+              .Property(r => r.Name)
+              .HasMaxLength(100)
+              .IsRequired();
+
+            modelBuilder.Entity<Category>()
+              .Property(u => u.IsActive)
+              .HasDefaultValue(false);
+
+            modelBuilder.Entity<Category>()
+              .Property(u => u.CreatedAt)
+              .HasDefaultValueSql("GETDATE()")
+              .ValueGeneratedOnAdd()
+              .IsRequired();
+
+            modelBuilder.Entity<Category>()
+              .Property(u => u.UpdatedAt)
+              .HasDefaultValueSql("GETDATE()")
+              .ValueGeneratedOnAddOrUpdate()
+              .IsRequired();
+
+
 
 
         }
