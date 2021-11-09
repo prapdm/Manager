@@ -9,6 +9,7 @@ namespace Manager
         public MappingProfile()
         {
             CreateMap<User, UserDto>();
+            CreateMap<Category, CategoryDto>();
 
  
  
