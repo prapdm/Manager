@@ -1,5 +1,7 @@
 ﻿@{
-    var username = Context.User.Identity.Name;  
+    var username = Context.User.Identity.Name;
+    var request = Context.Request;
+    var _baseURL = $"{request.Scheme}://{request.Host}";
 }
 
 <!DOCTYPE html>
@@ -12,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <base href="@_baseURL">
     <title>@ViewData["Title"]</title>
 
     <!-- Custom fonts for this template-->
@@ -35,11 +37,9 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="@Url.Action("Index")">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">Manager</div>
+            <a class="sidebar-brand d-flex align-items-center " href="@Url.Action("Index")">
+                
+                <div class="sidebar-brand-text">Manager</div>
             </a>
 
             <!-- Divider -->
@@ -70,7 +70,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="@Url.Action( "Get","Category" )">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Categories</span>
                 </a>
