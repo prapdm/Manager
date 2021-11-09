@@ -1,16 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Manager.Entities;
-using Manager;
 using Manager.Services;
 using FluentValidation;
 using Manager.Models;
@@ -22,7 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Vereyon.Web;
 using Manager.Middleware;
 using FluentEmail.MailKitSmtp;
-using System.IO;
+using Manager.Models.CustomValidators;
 
 namespace Manager
 {
@@ -56,9 +50,12 @@ namespace Manager
            
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IFileService, FileService>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
             services.AddScoped<IValidator<ChangePasswordDto>, ChangePasswordValidator>();
+            services.AddScoped<IValidator<CategoryDto>, CreateCategory>();
             services.AddScoped<ErrorLoggingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
