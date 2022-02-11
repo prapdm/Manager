@@ -19,6 +19,8 @@ namespace Manager.Entities
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Category> Categories { get; set; } 
+        public DbSet<Service> Services { get; set; } 
+        public DbSet<Price> Prices { get; set; } 
 
         
 
@@ -108,11 +110,58 @@ namespace Manager.Entities
               .ValueGeneratedOnAddOrUpdate()
               .IsRequired();
 
+            //Services
+            modelBuilder.Entity<Service>()
+               .Property(u => u.Name)
+               .HasMaxLength(150)
+               .IsRequired();
 
+            modelBuilder.Entity<Service>()
+               .Property(u => u.Slug)
+               .IsRequired();
+            
+            modelBuilder.Entity<Service>()
+               .Property(u => u.IsActive)
+               .HasDefaultValue(false);
+
+            modelBuilder.Entity<Service>()
+              .Property(u => u.CreatedAt)
+              .HasDefaultValueSql("GETDATE()")
+              .ValueGeneratedOnAdd()
+              .IsRequired();
+
+            modelBuilder.Entity<Service>()
+              .Property(u => u.UpdatedAt)
+              .HasDefaultValueSql("GETDATE()")
+              .ValueGeneratedOnAddOrUpdate()
+              .IsRequired();
+
+            //Prices
+            modelBuilder.Entity<Price>()
+              .Property(u => u.PurchasePrice)
+              .HasColumnType("decimal(10,4)")
+              .IsRequired();
+            
+            modelBuilder.Entity<Price>()
+              .Property(u => u.SellPrice)
+              .HasColumnType("decimal(10,4)")
+              .IsRequired();
+            
+            modelBuilder.Entity<Price>()
+              .Property(u => u.CreatedAt)
+              .HasDefaultValueSql("GETDATE()")
+              .ValueGeneratedOnAdd()
+              .IsRequired();
+
+            modelBuilder.Entity<Price>()
+              .Property(u => u.UpdatedAt)
+              .HasDefaultValueSql("GETDATE()")
+              .ValueGeneratedOnAddOrUpdate()
+              .IsRequired();
 
 
         }
 
-     
+
     }
 }
