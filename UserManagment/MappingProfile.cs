@@ -10,6 +10,8 @@ namespace Manager
         {
             CreateMap<User, UserDto>();
             CreateMap<Category, CategoryDto>();
+            CreateMap<Service, ServiceDto>();
+            CreateMap<Price, PriceDto>();
 
  
  
