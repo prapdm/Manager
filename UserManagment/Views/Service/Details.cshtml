@@ -1,0 +1,100 @@
+﻿@model Manager.Models.ServiceDto
+
+@{
+    ViewData["Title"] = "Service details";
+}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">@Model.Name </h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="p-3">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.Id)</b></td>
+                                    <td>@Html.DisplayFor(model => model.Id)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.Name)</b></td>
+                                    <td>@Html.DisplayFor(model => model.Name)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.Description)</b></td>
+                                    <td>@Html.DisplayFor(model => model.Description)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.SKU)</b></td>
+                                    <td>@Html.DisplayFor(model => model.SKU)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.Image)</b></td>
+                                    <td>
+                                        @if (Model.Image is not null)
+                                        {
+                                            <img style="width:100px" src=" @Html.DisplayFor(model => model.Image)" />
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.Slug)</b></td>
+                                    <td><i class="@Html.DisplayFor(model => model.Slug)"></i></td>
+                                </tr>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.Tags)</b></td>
+                                    <td>@Html.DisplayFor(model => model.Tags)</td>
+                                </tr>
+
+                                <tr>
+                                    <td><b>Purchase Price</b></td>
+                                    <td>@ViewData["PurchasePrice"]</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Sell Price</b></td>
+                                    <td>@ViewData["SellPrice"]</td>
+                                </tr>
+
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.CategoryId)</b></td>
+                                    <td>@Html.DisplayFor(model => model.CategoryId)  @ViewData["CategoryName"]</td>
+                                </tr>
+                                <tr>
+                                    <td><b>@Html.DisplayNameFor(model => model.IsActive)</b></td>
+                                    <td>@Html.DisplayFor(model => model.IsActive)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a href="@Url.Action("Get", "Service")" class="btn btn-primary btn-user btn-block">
+                        Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/js/sb-admin-2.min.js"></script>
+
+
+
+    <!-- Page level custom scripts -->
+    <script src="~/js/demo/datatables-demo.js"></script>
+}
