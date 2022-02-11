@@ -107,7 +107,7 @@ namespace Manager.Services
             if (dto.ImageFile is not null && dto.ImageFile.Length > 0)
             {
                 category.Image = $"/images/category/{dto.ImageFile.FileName}";
-                await _fileService.UploadAsync(dto.ImageFile);
+                await _fileService.UploadAsync(dto.ImageFile, "images/category");
 
             }
 
@@ -118,7 +118,8 @@ namespace Manager.Services
             category.IsActive = dto.IsActive;
             category.ParentId = dto.ParentId;
 
- 
+            _dBContext.Categories.Add(category);
+
             await _dBContext.SaveChangesAsync();
             return category;
         }
@@ -161,9 +162,12 @@ namespace Manager.Services
             if (dto.ImageFile is not null && dto.ImageFile.Length > 0)
             {
                 category.Image = $"/images/category/{dto.ImageFile.FileName}";
-                await _fileService.UploadAsync(dto.ImageFile);
+                await _fileService.UploadAsync(dto.ImageFile, "images/category");
+            } else if (String.IsNullOrEmpty(dto.Image))
+            {
+                category.Image = "";
             }
-
+        
             category.Name = dto.Name;
             category.Description = dto.Description;
             category.Icon = dto.Icon;
@@ -171,11 +175,13 @@ namespace Manager.Services
             category.IsActive = dto.IsActive;
             category.ParentId = dto.ParentId;
 
+   
+
             await _dBContext.SaveChangesAsync();
 
             return dto;
         }
 
-
+      
     }
 }
