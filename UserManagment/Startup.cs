@@ -1,16 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Manager.Entities;
-using Manager;
 using Manager.Services;
 using FluentValidation;
 using Manager.Models;
@@ -19,6 +13,10 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Vereyon.Web;
+using Manager.Middleware;
+using FluentEmail.MailKitSmtp;
+using Manager.Models.CustomValidators;
 
 namespace Manager
 {
@@ -43,7 +41,7 @@ namespace Manager
                        options.SlidingExpiration = true;
                        options.AccessDeniedPath = "/Account/Login";
                    });
-            services.AddControllersWithViews().AddFluentValidation(); 
+            services.AddControllersWithViews().AddFluentValidation().AddRazorRuntimeCompilation(); 
             services.AddDbContext<ManagerDbContext>(options =>
                 {
                     options.UseSqlServer(Configuration.GetConnectionString("ManagerDbConnection"));
@@ -51,10 +49,39 @@ namespace Manager
             services.AddScoped<DBSeeder>();
            
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ISerService, SerService>();
+            services.AddScoped<IFileService, FileService>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+            services.AddScoped<IValidator<ChangePasswordDto>, ChangePasswordValidator>();
+            services.AddScoped<IValidator<CategoryDto>, CreateCategory>();
+            services.AddScoped<IValidator<ServiceDto>, CreateService>();
+            services.AddScoped<ErrorLoggingMiddleware>();
+            services.AddScoped<RequestTimeMiddleware>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-          
+            services.AddFlashMessage();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IUserContextService, UserContextService>();
+
+            var mailSettings = new MailSettings();
+            Configuration.GetSection("MailSettings").Bind(mailSettings);
+            services.AddSingleton(mailSettings);
+
+            services.AddFluentEmail(mailSettings.From, mailSettings.DisplayName)
+                .AddRazorRenderer()
+                .AddMailKitSender(new SmtpClientOptions
+                {
+                    Server = mailSettings.Host,
+                    Port = mailSettings.Port,
+                    UseSsl = mailSettings.UseSsl,
+                    RequiresAuthentication = mailSettings.RequiresAuthentication,
+                    User = mailSettings.From,
+                    Password = mailSettings.Password
+                });
+            services.AddScoped<IMailSenderService, MailSenderService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,25 +93,38 @@ namespace Manager
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error/ExeptionPage");
+                app.UseHsts();
+            }
             
+            app.UseMiddleware<ErrorLoggingMiddleware>();
+            app.UseStatusCodePagesWithRedirects("/Error/Code/{0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
 
-            var cookiePolicyOptions = new CookiePolicyOptions
+           
+
+            app.UseCookiePolicy(new CookiePolicyOptions
             {
                 MinimumSameSitePolicy = SameSiteMode.Strict,
                 Secure = CookieSecurePolicy.Always,
-            };
-
-            app.UseCookiePolicy(cookiePolicyOptions);
+            });
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "manager",
+                    pattern: "manager/{controller=Manager}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Account}/{action=Login}");
+                    pattern: "{controller=Account}/{action=Login}/{id?}");
+
+
             });
         }
     }
