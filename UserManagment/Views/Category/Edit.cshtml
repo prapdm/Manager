@@ -47,7 +47,13 @@
                             @Html.ValidationMessageFor(m => m.ParentId, "", new { @class = "text-danger" })
                         </div>
                         <div class="form-group">
-                            <label for="file">Image</label>
+                            <label for="file">Image</label> 
+                            @if (!String.IsNullOrEmpty(Model.Image))
+                            {
+                                <img style="width:100px" src=" @Html.DisplayFor(model => model.Image)" /><br />
+                                @Html.TextBoxFor(m => m.Image, new { @class = "form-control form-control-user", @placeholder = "Image" })
+                            }
+
                             @Html.TextBoxFor(m => m.ImageFile, new { @type = "file", @class = "form-control-file", @placeholder = "Image url", @id = "file" })
                             @Html.ValidationMessageFor(m => m.ImageFile, "", new { @class = "text-danger" })
                         </div>
