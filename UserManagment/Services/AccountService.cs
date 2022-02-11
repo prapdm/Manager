@@ -10,10 +10,6 @@ using System.Linq;
 using System.Security.Claims;
 using Manager.Entities;
 using System.Threading.Tasks;
-using FluentEmail.Core;
-using System.Reflection;
-using System.Security.Policy;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 

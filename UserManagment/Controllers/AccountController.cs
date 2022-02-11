@@ -2,7 +2,6 @@
 using Manager.Models;
 using Manager.Services;
 using Vereyon.Web;
-using Microsoft.AspNetCore.Authentication;
 using System.Threading.Tasks;
 
 namespace Manager.Controllers

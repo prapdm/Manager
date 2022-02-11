@@ -1,6 +1,4 @@
-﻿using Manager.Entities;
-
-namespace Manager.Models
+﻿namespace Manager.Models
 {
     public class Query
     {
