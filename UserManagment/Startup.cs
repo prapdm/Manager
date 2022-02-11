@@ -51,11 +51,13 @@ namespace Manager
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ISerService, SerService>();
             services.AddScoped<IFileService, FileService>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
             services.AddScoped<IValidator<ChangePasswordDto>, ChangePasswordValidator>();
             services.AddScoped<IValidator<CategoryDto>, CreateCategory>();
+            services.AddScoped<IValidator<ServiceDto>, CreateService>();
             services.AddScoped<ErrorLoggingMiddleware>();
             services.AddScoped<RequestTimeMiddleware>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
