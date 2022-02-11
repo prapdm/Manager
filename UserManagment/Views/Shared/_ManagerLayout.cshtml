@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <base href="@_baseURL">
+ 
     <title>@ViewData["Title"]</title>
 
     <!-- Custom fonts for this template-->
@@ -37,7 +37,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center " href="@Url.Action("Index")">
+            <a class="sidebar-brand d-flex align-items-center " href="/">
                 
                 <div class="sidebar-brand-text">Manager</div>
             </a>
@@ -47,7 +47,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="@Url.Action("Index")">
+                <a class="nav-link" href="/">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
@@ -64,9 +64,9 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Products</span>
+                <a class="nav-link" href="@Url.Action( "Get","Service" )">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Services</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -75,30 +75,8 @@
                     <span>Categories</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                   aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Orders</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-
-                        <a class="collapse-item" href="utilities-color.html">Orders</a>
-                        <a class="collapse-item" href="utilities-color.html">Orders Status</a>
-
-                    </div>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Customers</span>
-                </a>
-            </li>
-
+        
+ 
 
 
             <!-- Divider -->
@@ -111,7 +89,7 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="@Url.Action( "Get","Users" )">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-users"></i>
                     <span>System users</span>
                 </a>
             </li>
@@ -141,14 +119,14 @@
             </div>
             <li class="nav-item">
                 <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fab fa-linkedin"></i>
                     <span>LinkedIn</span>
                 </a>
             </li>
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fab fa-github-square"></i>
                     <span>Github</span>
                 </a>
             </li>
