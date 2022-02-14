@@ -4,6 +4,8 @@
     <TargetFramework>net5.0</TargetFramework>
 	<PreserveCompilationReferences>true</PreserveCompilationReferences>
 	<PreserveCompilationContext>true</PreserveCompilationContext>
+	<UserSecretsId>5b666832-5dbc-4438-9a31-891fc45a8d6e</UserSecretsId>
+	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
 
@@ -27,6 +29,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
     <PackageReference Include="Vereyon.Web.FlashMessage" Version="3.0.0" />
   </ItemGroup>
