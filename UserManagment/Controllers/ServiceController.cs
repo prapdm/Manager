@@ -7,7 +7,7 @@ using Vereyon.Web;
 
 namespace Manager.Controllers
 {
-    [Authorize(Roles = "Administrator, Manager")]
+    
     [AutoValidateAntiforgeryToken]
     public class ServiceController : Controller
     {
@@ -22,7 +22,7 @@ namespace Manager.Controllers
             _serService = serService;
             _categoryService = categoryService;
         }
-
+        [Authorize(Roles = "Administrator, Manager, User")]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] Query query)
         {
@@ -32,6 +32,7 @@ namespace Manager.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Administrator, Manager, User")]
         public async Task<IActionResult> Details(int? id)
         {
             var service = await _serService.Get((int)id);
@@ -63,6 +64,7 @@ namespace Manager.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Administrator, Manager, User")]
         public async Task<IActionResult> Edit(int? id)
         {
             var service = await _serService.Get((int)id);
@@ -71,6 +73,7 @@ namespace Manager.Controllers
         }
 
         [HttpPost, ActionName("Edit")]
+        [Authorize(Roles = "Administrator, Manager")]
         public async Task<IActionResult> Update(ServiceDto dto)
         {
             ViewData["categories"] = await _categoryService.GetAll();
@@ -85,6 +88,7 @@ namespace Manager.Controllers
 
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int id)
         {
             await _serService.Delete(id);
@@ -93,6 +97,7 @@ namespace Manager.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator, Manager, User")]
         public async Task<IActionResult> Create()
         {
             ViewData["categories"] = await _categoryService.GetAll();
@@ -100,6 +105,7 @@ namespace Manager.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create(ServiceDto dto)
         {
             ViewData["categories"] = await _categoryService.GetAll();
