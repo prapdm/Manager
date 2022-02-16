@@ -84,7 +84,7 @@ namespace Manager.Services
                 Name = dto.Name,
                 Surname = dto.Surname,
                 Subject = "Confirm your addres email",
-                Template = "Welcome.cshtml",
+                Template = "Welcome",
                 VerifcationCode = dto.VerifcationCode
             };
 
@@ -164,7 +164,7 @@ namespace Manager.Services
                 Name = user.Name,
                 Surname = user.Surname,
                 Subject = "Reset password",
-                Template = "ResetPassword.cshtml",
+                Template = "ResetPassword",
                 Url = $"{url}?token={token}"
             };
 
