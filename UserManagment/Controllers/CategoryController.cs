@@ -7,7 +7,7 @@ using Vereyon.Web;
 
 namespace Manager.Controllers
 {
-    [Authorize(Roles = "Administrator, Manager")]
+  
     [AutoValidateAntiforgeryToken]
     public class CategoryController : Controller
     {
@@ -24,6 +24,7 @@ namespace Manager.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator, Manager, User")]
         public async Task<IActionResult> Get([FromQuery] Query query)
         {
             var categoryDtos = await _categoryService.GetAll(query);
@@ -31,6 +32,7 @@ namespace Manager.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator, Manager, User")]
         public async Task<IActionResult> Create()
         {
             ViewData["categories"] = await _categoryService.GetAll();
@@ -38,6 +40,7 @@ namespace Manager.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create(CategoryDto dto)
         {
             ViewData["categories"] = await _categoryService.GetAll();
@@ -52,6 +55,7 @@ namespace Manager.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int id)
         {
             await _categoryService.Delete(id);
@@ -60,6 +64,7 @@ namespace Manager.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator, Manager, User")]
         public async Task<IActionResult> Edit(int? id)
         {
             var category = await _categoryService.Get((int)id);
@@ -68,6 +73,7 @@ namespace Manager.Controllers
         }
 
         [HttpPost, ActionName("Edit")]
+        [Authorize(Roles = "Administrator, Manager")]
         public async Task<IActionResult> Update(CategoryDto dto)
         {
             ViewData["categories"] = await _categoryService.GetAll();
@@ -81,6 +87,7 @@ namespace Manager.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator, Manager, User")]
         public async Task<IActionResult> Details(int? id)
         {
             var category = await _categoryService.Get((int)id);

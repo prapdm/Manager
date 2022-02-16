@@ -507,15 +507,15 @@ namespace Manager
                     Role = new Role()
                     {
                         Name = "Administrator",
-                        Description = "Can view, create, update and delete customers and resellers",
+                        Description = "Can view, create, update",
                         CreatedAt = DateTime.Now
                     },
                     Name = "Jan",
                     Surname = "Admiński",
-                    Email = "admin@Manager.pl",
+                    Email = "admin@manager.pl",
                     Phone = "+48.654125456",
                     IsActive = true,
-                    PasswordHash = "+7IvXx8bCmbADWM9JDzJYVqxdbjrz8fO/S7c51Q==",
+                    PasswordHash = "AQAAAAEAACcQAAAAENyMVSa5mYU1Z0cd8MW9RIMeGDDWvGWNW6wz+2VEBGiHfqnvGcGGaeeymXEWwJbAvg==",
                     CreatedAt = DateTime.Now
                 },
                 new User()
@@ -523,15 +523,15 @@ namespace Manager
                     Role = new Role()
                     {
                         Name = "Manager",
-                        Description = "Can view, create and update customers and resellers",
+                        Description = "Can view  and update",
                         CreatedAt = DateTime.Now
                     },
                     Name = "Stefan",
                     Surname = "Fajkowski",
-                    Email = "s.fajkowski@Manager.pl",
+                    Email = "manager@manager.pl",
                     Phone = "+48.634242553",
-                    IsActive = false,
-                    PasswordHash = "+7IvXx8bCmbADWM9JDzJYVqxdbjrz8fO/S7c51Q==",
+                    IsActive = true,
+                    PasswordHash = "AQAAAAEAACcQAAAAENyMVSa5mYU1Z0cd8MW9RIMeGDDWvGWNW6wz+2VEBGiHfqnvGcGGaeeymXEWwJbAvg==",
                     CreatedAt = DateTime.Now
 
                 },
@@ -539,16 +539,16 @@ namespace Manager
                 {
                     Role = new Role()
                     {
-                        Name = "Reseller",
-                        Description = "Can view, create and update yourself and own customers",
+                        Name = "User",
+                        Description = "Can view",
                         CreatedAt = DateTime.Now
                     },
                     Name = "August",
                     Surname = "Wienkowski",
-                    Email = "a.wienkowski@itsolutions.pl",
+                    Email = "user@manager.pl",
                     Phone = "+48.553334234",
-                    IsActive = false,
-                    PasswordHash = "+7IvXx8bCmbADWM9JDzJYVqxdbjrz8fO/S7c51Q==",
+                    IsActive = true,
+                    PasswordHash = "AQAAAAEAACcQAAAAEApugCGEqb6o7UxWAZkMa5nzUgVEJZCVheEEyofMZ7/AVucqyq1KjjqQ1/CReYjtcg==",
                     CreatedAt = DateTime.Now
 
                 }

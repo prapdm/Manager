@@ -7,7 +7,7 @@ using Vereyon.Web;
 
 namespace Manager.Controllers
 {
-    [Authorize(Roles = "Administrator, Manager")]
+  
     [AutoValidateAntiforgeryToken]
     public class UsersController : Controller
     {
@@ -21,6 +21,7 @@ namespace Manager.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator, Manager, User")]
         public async Task<IActionResult> Get([FromQuery] Query query)
         {
             var usersDtos = await _userService.GetAll(query);
@@ -28,6 +29,7 @@ namespace Manager.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator, Manager, User")]
         public async Task<IActionResult> Details(int? id)
         {
             var user = await _userService.GetUser(id);
@@ -35,6 +37,7 @@ namespace Manager.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator, Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             var user = await _userService.EditUser(id);
@@ -43,6 +46,7 @@ namespace Manager.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator, Manager, User")]
         public async Task<IActionResult> Create()
         {
             ViewData["roles"] = await _userService.GetRoles();
@@ -50,6 +54,7 @@ namespace Manager.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("Name, Surname, Password, ConfirmPassword, Email, Phone, IsActive, RoleId")] RegisterUserDto dto)
         {
             ViewData["roles"] = await _userService.GetRoles();
@@ -63,6 +68,7 @@ namespace Manager.Controllers
         }
 
         [HttpPost, ActionName("Edit")]
+        [Authorize(Roles = "Administrator, Manager")]
         public async Task<IActionResult> Update(UserDto dto)
         {
             if (!ModelState.IsValid)
@@ -77,6 +83,7 @@ namespace Manager.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int id)
         {
             await _userService.Delete(id);
