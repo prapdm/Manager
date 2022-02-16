@@ -27,7 +27,7 @@ namespace Manager.Services
                            .To(dto.Email, $"{dto.Name} {dto.Surname}" )
                            .BCC(_mailSettings.AdminBCC)
                            .Subject(dto.Subject)
-                           .UsingTemplateFromFile($@"Views\Mail\{dto.Template}", dto);
+                           .UsingTemplateFromFile($@"Views/Mail/{dto.Template}", dto);
 
             await email.SendAsync();
         }
