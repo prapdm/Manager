@@ -95,7 +95,8 @@ namespace Manager
             }
             else
             {
-                app.UseExceptionHandler("/Error/ExeptionPage");
+                app.UseDeveloperExceptionPage();
+               // app.UseExceptionHandler("/Error/ExeptionPage");
                 app.UseHsts();
             }
             
