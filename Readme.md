@@ -2,7 +2,10 @@
 > It's typical CRUD Web Application with ASP.NET Core MVC 
 > 
 > Live demo [_here_](https://netcoremanager.azurewebsites.net/). 
-> 
+> ```
+>Login: user@manager.pl
+> Password: Password123
+> ```
 >Run in Docker: https://hub.docker.com/repository/docker/avenus/manager
 
 
