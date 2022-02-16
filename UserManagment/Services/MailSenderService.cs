@@ -1,5 +1,6 @@
 ﻿using FluentEmail.Core;
 using Manager.Models;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Manager.Services
@@ -27,8 +28,8 @@ namespace Manager.Services
                            .To(dto.Email, $"{dto.Name} {dto.Surname}" )
                            .BCC(_mailSettings.AdminBCC)
                            .Subject(dto.Subject)
-                           .UsingTemplateFromFile($@"Views/Mail/{dto.Template}", dto);
-
+                           .UsingTemplateFromFile(Path.Combine($@"wwwroot/Mail/",  dto.Template), dto);
+            
             await email.SendAsync();
         }
 

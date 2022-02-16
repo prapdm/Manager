@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
 	<PreserveCompilationReferences>true</PreserveCompilationReferences>
-	<PreserveCompilationContext>true</PreserveCompilationContext>
 	<UserSecretsId>5b666832-5dbc-4438-9a31-891fc45a8d6e</UserSecretsId>
 	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	<ApplicationIcon />
