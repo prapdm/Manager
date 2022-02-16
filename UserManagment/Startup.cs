@@ -100,8 +100,7 @@ namespace Manager
             }
             else
             {
-                app.UseDeveloperExceptionPage();
-               // app.UseExceptionHandler("/Error/ExeptionPage");
+                app.UseExceptionHandler("/Error/ExeptionPage");
                 app.UseHsts();
             }
             
