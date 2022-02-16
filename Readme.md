@@ -1,7 +1,7 @@
 # Manager
 > It's typical CRUD Web Application with ASP.NET Core MVC 
 > 
-> Live demo [_here_](https://). 
+> Live demo [_here_](https://netcoremanager.azurewebsites.net/). 
 > 
 >Run in Docker: https://hub.docker.com/repository/docker/avenus/manager
 
