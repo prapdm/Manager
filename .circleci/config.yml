@@ -1,7 +1,6 @@
 version: 2.1
 
 orbs:
-  heroku: circleci/heroku@1.2.6
   windows: circleci/windows@2.2.0
 
 jobs:
@@ -44,7 +43,4 @@ workflows:
       - test
       - build:
           requires:
-            - test
-  heroku_deploy:
-    jobs:
-      - heroku/deploy-via-git          
+            - test      
