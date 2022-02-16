@@ -25,6 +25,7 @@ namespace Manager
                 var pendingMigrations = _dbContext.Database.GetPendingMigrations();
                 if (pendingMigrations != null && pendingMigrations.Any())
                 {
+                    _dbContext.Database.EnsureCreated();
                     _dbContext.Database.Migrate();
                 }
 
