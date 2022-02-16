@@ -95,7 +95,9 @@ namespace Manager.Services
         public async Task<bool> VerifyPassword(LoginUserDto dto)
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == dto.Email);
+                .Where(u => u.Email == dto.Email)
+                .Where(u => u.IsActive)
+                .FirstOrDefaultAsync();
 
             if (user is null)
                 return false;
