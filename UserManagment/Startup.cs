@@ -17,6 +17,7 @@ using Vereyon.Web;
 using Manager.Middleware;
 using FluentEmail.MailKitSmtp;
 using Manager.Models.CustomValidators;
+using System;
 
 namespace Manager
 {
@@ -44,7 +45,11 @@ namespace Manager
             services.AddControllersWithViews().AddFluentValidation().AddRazorRuntimeCompilation(); 
             services.AddDbContext<ManagerDbContext>(options =>
                 {
-                    options.UseSqlServer(Configuration.GetConnectionString("ManagerDbConnection"));
+                    bool isAzure = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_ConnectionStrings") is not null;
+                    if(isAzure)
+                        options.UseSqlServer(Environment.GetEnvironmentVariable("SQLAZURECONNSTR_ConnectionStrings"));
+                    else
+                        options.UseSqlServer(Configuration.GetConnectionString("ManagerDbConnection"));
                 });
             services.AddScoped<DBSeeder>();
            
