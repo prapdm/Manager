@@ -24,8 +24,7 @@ jobs:
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-    - run:  pwd | ls
-    - run:  dotnet-ef database update
+    - run: dotnet-ef database update --project ${{ env.WORKING_DIRECTORY }}
     - name: Test
       run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
     - name: Publish
