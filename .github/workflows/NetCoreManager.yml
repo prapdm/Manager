@@ -18,6 +18,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+    - run: dotnet tool install --global dotnet-ef
     - name: Restore
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Build
@@ -32,6 +33,7 @@ jobs:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.NETCOREMANAGER_FFFF }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+    - run: dotnet ef database update
     - name: Publish Artifacts
       uses: actions/upload-artifact@v1.0.0
       with:
