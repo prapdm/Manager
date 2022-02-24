@@ -9,6 +9,8 @@ env:
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 5.0.x
   WORKING_DIRECTORY: UserManagment
+  ASPNETCORE_ENVIRONMENT : Azure
+  SQLAZURECONNSTR_ConnectionStrings: ${{ secrets.SQLAZURECONNSTR_ConnectionStrings }}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,12 +26,12 @@ jobs:
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Build
       run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+    - run: dotnet-ef database update --project ${{ env.WORKING_DIRECTORY }}
     - name: Test
       run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-    - name: Run dotnet-ef database update
-      run: cd ${{ env.WORKING_DIRECTORY }} | dotnet-ef database update
+
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
       with:
