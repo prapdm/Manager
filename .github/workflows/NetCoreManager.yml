@@ -10,15 +10,11 @@ env:
   DOTNET_CORE_VERSION: 5.0.x
   WORKING_DIRECTORY: UserManagment
   ASPNETCORE_ENVIRONMENT : Azure
-  SQLAZURECONNSTR_ConnectionStrings: Server=tcp:${{ secrets.DBSERVER }},1433;Initial Catalog=Manager_db;Persist Security Info=False;User ID=${{ secrets.DBLOGIN }};Password=${{ secrets.DBPASSWORD }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+  SQLAZURECONNSTR_ConnectionStrings: ${{ secrets.SQLAZURECONNSTR_ConnectionStrings }}
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - run: echo ${{secrets.TEST }} | sed 's/./& /g'
-    - run: echo ${{secrets.TEST }}
-    - run: echo ${{secrets.TEST2 }} | sed 's/./& /g'
-    - run: echo ${{secrets.TEST2 }}
     - uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
