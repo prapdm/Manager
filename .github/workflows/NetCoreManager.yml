@@ -2,7 +2,7 @@ name: Build and deploy .NET Core application to Web App NetCoreManager
 on:
   push:
     branches:
-    - Master
+    - Develop
 env:
   AZURE_WEBAPP_NAME: NetCoreManager
   AZURE_WEBAPP_PACKAGE_PATH: UserManagment/published
