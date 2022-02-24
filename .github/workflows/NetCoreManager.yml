@@ -33,7 +33,6 @@ jobs:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.NETCOREMANAGER_FFFF }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-    - run: dotnet ef database update
     - name: Publish Artifacts
       uses: actions/upload-artifact@v1.0.0
       with:
