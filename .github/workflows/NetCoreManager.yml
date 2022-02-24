@@ -9,6 +9,8 @@ env:
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 5.0.x
   WORKING_DIRECTORY: UserManagment
+  ASPNETCORE_ENVIRONMENT : Azure
+  SQLAZURECONNSTR_ConnectionStrings: ${{ secrets.SQLAZURECONNSTR_ConnectionStrings }}
 jobs:
   build:
     runs-on: ubuntu-latest
